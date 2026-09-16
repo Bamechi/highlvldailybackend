@@ -1,0 +1,15 @@
+{
+  "name": "high-lvl-daily-rundown",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HIGH - LVL DAILY show-control app: Producer Desk, Stage, and Telegram producer bot.",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "demo": "python3 scripts/build-demo.py && python3 -m http.server 4141"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "engines": { "node": ">=20" }
+}

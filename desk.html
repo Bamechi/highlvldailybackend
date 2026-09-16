@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Producer Desk · HIGH - LVL DAILY</title>
+<link rel="stylesheet" href="/assets/brand.css">
+<link rel="stylesheet" href="/assets/desk.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/assets/config.js"></script>
+<script src="/assets/store.js"></script>
+<script src="/assets/desk.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const store = HLD.createStore(window.HLD_CONFIG);
+const stageUrl = '/stage' + (window.HLD_STAGE_KEY ? '?k=' + window.HLD_STAGE_KEY : '');
+mountDesk(document.getElementById('app'), store, { stageUrl });
+if (store.mode === 'local') document.title = 'Producer Desk · demo (no Supabase config)';
+</script>
+</body>
+</html>

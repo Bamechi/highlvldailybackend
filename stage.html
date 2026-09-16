@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Stage · HIGH - LVL DAILY</title>
+<link rel="stylesheet" href="/assets/brand.css">
+<link rel="stylesheet" href="/assets/stage.css">
+<style>html,body{height:100%;overflow:hidden;cursor:none}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/assets/config.js"></script>
+<script src="/assets/store.js"></script>
+<script src="/assets/stage.js"></script>
+<!-- Social embed scripts (only used when "Live embed" is switched on) -->
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script async src="https://www.instagram.com/embed.js"></script>
+</head>
+<body>
+<div id="stage" style="position:fixed;inset:0"></div>
+<script>
+const store = HLD.createStore(window.HLD_CONFIG);
+mountStage(document.getElementById('stage'), store);
+document.addEventListener('dblclick', () => document.documentElement.requestFullscreen && document.documentElement.requestFullscreen());
+</script>
+</body>
+</html>

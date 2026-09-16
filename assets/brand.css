@@ -1,0 +1,45 @@
+/* HIGH - LVL DAILY — brand tokens (Brand Asset Pack v0.3) */
+@import url('https://fonts.googleapis.com/css2?family=Michroma&family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root{
+  --ink:#0B0B09; --paper:#F0EEE6; --gold:#A49358; --gold2:#D6C27A; --red:#E8302A;
+  --ox:#3D0606; --plat:#D9D8D2; --ultra:#002FA7; --mal:#0B6B4B;
+  --ink2:#151512; --ink3:#1F1F1B; --mute:rgba(240,238,230,.55); --mute2:rgba(240,238,230,.3);
+  --mich:'Michroma','Orbitron',ui-sans-serif,system-ui,sans-serif;
+  --tight:'Inter Tight','Inter','Helvetica Neue',Arial,sans-serif;
+  --body:'Manrope','Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono','SFMono-Regular',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{background:var(--ink);color:var(--paper);-webkit-font-smoothing:antialiased;font-family:var(--body)}
+.mich{font-family:var(--mich);text-transform:uppercase;letter-spacing:.16em;line-height:1.2}
+.mono{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.12em;line-height:1.3}
+.head{font-family:var(--tight);font-weight:800;letter-spacing:-.04em;line-height:.9;text-transform:uppercase}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.dot{display:inline-block;background:var(--red)}
+
+/* Typographic wordmark: scales with font-size on .wm */
+.wm{display:inline-block;font-size:100px;color:var(--paper);line-height:1}
+.wm-l1{font-family:var(--mich);font-size:.34em;letter-spacing:.2em;line-height:1;white-space:nowrap;text-transform:uppercase}
+.wm-l2{font-family:var(--tight);font-weight:800;font-size:1.55em;letter-spacing:-.04em;line-height:.86;margin:.09em 0 0 -.05em;white-space:nowrap}
+.wm-l2 .dot{width:.17em;height:.17em;margin-left:.1em;vertical-align:baseline}
+.wm-rule{height:1px;background:var(--gold);margin:.14em 0 .13em}
+.wm-sub{font-family:var(--mono);font-weight:500;font-size:.115em;letter-spacing:.14em;white-space:nowrap;text-transform:uppercase;opacity:.85}
+.wm.compact .wm-sub,.wm.compact .wm-rule{display:none}
+
+/* Segment colors */
+.seg-the-open{--segbg:var(--paper);--segfg:var(--ink)}
+.seg-tech-news{--segbg:var(--ultra);--segfg:var(--paper)}
+.seg-the-news{--segbg:var(--ox);--segfg:var(--paper)}
+.seg-culture{--segbg:var(--mal);--segfg:var(--paper)}
+.seg-the-shoutout{--segbg:var(--gold);--segfg:var(--ink)}
+.seg-the-seat{--segbg:var(--plat);--segfg:var(--ink)}
+.seg-the-close{--segbg:var(--ink);--segfg:var(--paper)}
+
+.chip{display:inline-flex;align-items:center;gap:.6em;font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:0 12px;height:28px;background:var(--segbg,var(--ink3));color:var(--segfg,var(--paper));outline:1px solid rgba(217,216,210,.35);outline-offset:-1px;white-space:nowrap}
+.live{display:inline-flex;align-items:center;gap:12px;background:var(--red);color:var(--paper);font-family:var(--mono);font-weight:700;font-size:18px;letter-spacing:.2em;padding:0 24px 0 20px;height:42px;border-radius:21px}
+.live i{width:11px;height:11px;border-radius:50%;background:var(--paper);display:block;animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.live i{animation:none}}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
