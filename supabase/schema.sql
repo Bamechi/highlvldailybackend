@@ -69,6 +69,14 @@ create policy "public read items" on items for select using (true);
 drop policy if exists "public read stage" on stage_state;
 create policy "public read stage" on stage_state for select using (true);
 
+-- Storage bucket for screenshots (only used when SCREENSHOTONE_ACCESS_KEY is set;
+-- Microlink returns its own hosted URLs and needs no bucket).
+insert into storage.buckets (id, name, public)
+values ('shots', 'shots', true)
+on conflict (id) do nothing;
+drop policy if exists "public read shots" on storage.objects;
+create policy "public read shots" on storage.objects for select using (bucket_id = 'shots');
+
 -- Realtime: the Desk and the Stage subscribe to changes on these two tables.
 do $$
 begin

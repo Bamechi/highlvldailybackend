@@ -11,6 +11,8 @@ export default async function handler(req, res) {
       case 'add': return json(res, 200, await A.addItem({ ...p, added_by: 'desk' }));
       case 'update': return json(res, 200, await A.updateItem(p.id, p.fields || {}));
       case 'status': return json(res, 200, await A.setStatus(p.id, p.status));
+      case 'capture': return json(res, 200, await A.capture(p.id));
+      case 'resummarize': return json(res, 200, await A.resummarize(p.id));
       case 'reorder': return json(res, 200, { ok: await A.reorder(p.ids || []) });
       case 'publish': return json(res, 200, await A.publish());
       case 'live': return json(res, 200, await A.patchState(p.patch || {}));

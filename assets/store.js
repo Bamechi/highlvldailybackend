@@ -76,6 +76,7 @@
         }
         case 'update': { const it = data.items.find(i => i.id === p.id); if (it) Object.assign(it, p.fields || {}); break; }
         case 'status': { const it = data.items.find(i => i.id === p.id); if (it) { it.status = p.status; it.position = nextPos(p.status); } break; }
+        case 'capture': case 'resummarize': break; // server-only in production; no-op in demo
         case 'reorder': { (p.ids || []).forEach((id, i) => { const it = data.items.find(x => x.id === id); if (it) { it.position = i + 1; it.status = 'queued'; } }); break; }
         case 'publish': { data.state.rundown = snapshot(); data.state.idx = Math.min(data.state.idx, Math.max(0, data.state.rundown.length - 1)); data.state.published_at = new Date().toISOString(); if (data.state.mode === 'standby' && data.state.rundown.length) data.state.mode = 'item'; break; }
         case 'live': Object.assign(data.state, p.patch || {}); break;

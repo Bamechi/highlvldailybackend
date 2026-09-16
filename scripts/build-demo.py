@@ -4,6 +4,19 @@ import pathlib, sys, json
 root = pathlib.Path(__file__).resolve().parent.parent
 a = lambda p: (root / 'assets' / p).read_text()
 
+def tweet_shot(handle, name, text, likes='4.2K', rts='812'):
+    lines=[]
+    words=text.split(); cur=''
+    for w in words:
+        if len(cur)+len(w)+1>34: lines.append(cur); cur=w
+        else: cur=(cur+' '+w).strip()
+    if cur: lines.append(cur)
+    body=''.join(f"<text x='40' y='{182+i*40}' font-family='Helvetica,Arial' font-size='30' fill='#0f1419'>{ln}</text>" for i,ln in enumerate(lines[:8]))
+    h=182+len(lines[:8])*40+70
+    from urllib.parse import quote
+    svg=f"""<svg xmlns='http://www.w3.org/2000/svg' width='700' height='{h}' viewBox='0 0 700 {h}'><rect width='700' height='{h}' fill='#ffffff'/><circle cx='68' cy='72' r='28' fill='#0B0B09'/><text x='68' y='80' font-family='Helvetica,Arial' font-weight='800' font-size='24' fill='#F0EEE6' text-anchor='middle'>{name[0]}</text><text x='112' y='66' font-family='Helvetica,Arial' font-weight='700' font-size='26' fill='#0f1419'>{name}</text><text x='112' y='98' font-family='Helvetica,Arial' font-size='22' fill='#536471'>{handle}</text><text x='650' y='72' font-family='Helvetica,Arial' font-weight='700' font-size='40' fill='#1d9bf0' text-anchor='end'>X</text>{body}<line x1='40' y1='{h-58}' x2='660' y2='{h-58}' stroke='#eff3f4' stroke-width='2'/><text x='40' y='{h-24}' font-family='Helvetica,Arial' font-size='20' fill='#536471'>{rts} Reposts   ·   {likes} Likes</text></svg>"""
+    return 'data:image/svg+xml;utf8,'+quote(svg, safe="/:'=,. ")
+
 def svg_img(bg, fg, text):
     s = f"""<svg xmlns='http://www.w3.org/2000/svg' width='620' height='620' viewBox='0 0 620 620'><rect width='620' height='620' fill='{bg}'/><rect x='30' y='30' width='560' height='560' fill='none' stroke='{fg}' stroke-opacity='.35'/><text x='60' y='560' font-family='Helvetica,Arial' font-weight='800' font-size='72' fill='{fg}' letter-spacing='-3'>{text}</text><text x='60' y='90' font-family='Menlo,monospace' font-size='16' fill='{fg}' fill-opacity='.7' letter-spacing='3'>DEMO IMAGE</text></svg>"""
     from urllib.parse import quote
@@ -18,17 +31,17 @@ items = [
     item(2, headline='The AI layoffs nobody is counting', summary='Every quarter the headline number drops, and every quarter the roles that never get re-listed grow. The monologue is about the jobs that disappear without an announcement.', talking_points='Open with the barbershop story.\nName three roles that vanished this year.\nLand it on: build something that cannot be quietly removed.', segment='the-open', frame='opinion', source='MONOLOGUE', author='19Keys'),
     item(3, type='ad', headline="WE'LL BE RIGHT BACK", segment='the-news', source='AD BREAK'),
     item(4, type='card', headline='TECH NEWS', segment='tech-news', source='SEGMENT'),
-    item(5, type='x', url='https://x.com/example/status/1', headline='Every founder I know is quietly replacing their first three hires with agents. Say it louder for the people still writing job descriptions.', author='@example', source='X', segment='tech-news', talking_points='Is this true at the seed stage or only post-Series A?\nWhat does the first human hire look like now?', added_by='telegram:1'),
+    item(5, type='x', url='https://x.com/example/status/1', headline='Founders are quietly hiring agents first', summary='A founder says the first three hires are now AI agents, and the job-description crowd has not caught up.', image_url=tweet_shot('@example','Naval-ish','Every founder I know is quietly replacing their first three hires with agents. Say it louder for the people still writing job descriptions.'), author='@example', source='X', segment='tech-news', talking_points='Is this true at the seed stage or only post-Series A?\nWhat does the first human hire look like now?', added_by='telegram:1'),
     item(6, type='article', url='https://example.com/story', headline='Survey: four in ten under-30s take financial advice from creators before banks', summary='A new survey of 4,000 adults finds trust in creator-led money content now rivals traditional institutions for the under-30 cohort.', image_url=svg_img('#002FA7', '#F0EEE6', 'CREATORS'), source='Demo Wire', author='Staff', segment='the-news', talking_points='Who is liable when the advice is wrong?\nThis is the Creator Growth Program thesis in one stat.'),
     item(7, type='card', headline='CULTURE', segment='culture', source='SEGMENT'),
-    item(8, type='instagram', url='https://www.instagram.com/p/demo/', headline='Reel: inside the Atlanta creator house, day one of the Peace on the Pond residency', author='@highlvl', source='Instagram', image_url=svg_img('#0B6B4B', '#F0EEE6', 'ATLANTA'), segment='culture', added_by='telegram:2'),
+    item(8, type='instagram', url='https://www.instagram.com/p/demo/', headline='Inside the Atlanta creator house, day one', summary='First look at the Peace on the Pond residency: twelve creators, one house, a week of building in public.', author='@highlvl', source='Instagram', image_url=tweet_shot('@highlvl','High Lvl','Day one inside the Atlanta creator house. Peace on the Pond residency is live. Twelve creators, one house, seven days.', likes='9.1K', rts='1.4K'), segment='culture', added_by='telegram:2'),
     item(9, type='card', headline='THE SHOUTOUT', segment='the-shoutout', source='SEGMENT'),
     item(10, headline='Shoutout of the Day: the 17-year-old who built a free tutoring app for his whole block', summary='Twelve tutors, two hundred students, zero funding. He starts college in the fall.', image_url=svg_img('#A49358', '#0B0B09', 'SHOUTOUT'), segment='the-shoutout', source='SHOUTOUT'),
     item(11, type='card', headline='THE SEAT', summary='Ziion members only. Call in from the community.', segment='the-seat', source='SEGMENT'),
     item(12, type='card', headline='THE CLOSE', summary='Tomorrow 4:44PM PT.', segment='the-close', source='SEGMENT'),
     item(13, status='backlog', type='article', url='https://example.com/chips', headline='Chipmaker says next-gen accelerators ship a quarter early', source='Demo Tech', segment='tech-news', added_by='telegram:1'),
     item(14, status='backlog', headline='Do we cover the London Black History Month lineup this week or next?', segment='culture', source='DESK'),
-    item(15, status='backlog', type='x', url='https://x.com/example/status/2', headline='The best time to start a daily show was ten years ago. The second best time is 4:44 today.', author='@nineteenkeys', source='X', segment='the-open'),
+    item(15, status='backlog', type='x', url='https://x.com/example/status/2', headline='The second best time is 4:44 today', summary='A riff on the old proverb, pointed at anyone still waiting to start their daily show.', image_url=tweet_shot('@nineteenkeys','19Keys','The best time to start a daily show was ten years ago. The second best time is 4:44 today.'), author='@nineteenkeys', source='X', segment='the-open'),
 ]
 for n, it in enumerate([i for i in items if i['status'] == 'backlog'], 1): it['position'] = n
 fields = ['id','type','url','headline','summary','talking_points','image_url','author','source','embed_html','segment','frame']

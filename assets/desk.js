@@ -112,12 +112,14 @@
             <span class="chip seg-${esc(it.segment)}" data-cycleseg title="Click to change segment">${H.SEGMENT_LABEL[it.segment] || it.segment}</span>
             <span class="s">${esc(it.source || it.type)}${it.author ? ' · ' + esc(it.author) : ''}</span>
             ${it.frame === 'opinion' ? '<span class="s op">Opinion</span>' : ''}
-            ${it.image_url ? '<span class="s">img</span>' : ''}
+            ${it.image_url ? '<span class="s ok">shot</span>' : '<span class="s no">no image</span>'}
+            ${it.url ? `<a class="s link" href="${esc(it.url)}" target="_blank" rel="noopener" title="Open the original post">open source</a>` : ''}
             ${it.added_by && it.added_by.startsWith('telegram') ? '<span class="s">via Telegram</span>' : ''}
           </div>
         </div>
         <div class="acts">
           ${queued ? `<button class="btn sm ${onstage ? 'red' : ''}" data-go title="Put on stage">${onstage ? 'On air' : 'Air'}</button><button class="btn sm ghost" data-up title="Move up">↑</button><button class="btn sm ghost" data-down title="Move down">↓</button><button class="btn sm ghost" data-unq title="Back to backlog">Bench</button>` : `<button class="btn sm gold" data-q title="Add to rundown">Queue</button>`}
+          ${it.url ? '<button class="btn sm ghost" data-recap title="Screenshot the source again">Recapture</button>' : ''}
           <button class="btn sm ghost" data-open title="Edit details">Edit</button>
           <button class="btn sm ghost" data-trash title="Trash">✕</button>
         </div>
@@ -141,6 +143,7 @@
       // row actions
       $$('.it').forEach(row => {
         const id = row.dataset.id; const it = items.find(x => x.id === id);
+        const rc = row.querySelector('[data-recap]'); if (rc) rc.onclick = async () => { rc.disabled = true; rc.textContent = 'Capturing…'; try { await act('capture', { id }); toast('Recaptured. Publish to update the Stage.'); } catch (e) {} rc.disabled = false; rc.textContent = 'Recapture'; };
         row.querySelector('[data-open]').onclick = () => openEditor(it);
         row.querySelector('[data-edit]').onclick = () => openEditor(it);
         row.querySelector('[data-trash]').onclick = () => { if (confirm(`Trash "${it.headline}"?`)) act('status', { id, status: 'trash' }); };
@@ -174,12 +177,16 @@
         <div style="flex:1"><label class="f">Type</label><select data-f="type">${['x', 'instagram', 'article', 'text', 'card', 'ad'].map(t => `<option ${it.type === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div></div>
         <label class="f">Image URL</label><input data-f="image_url" value="${esc(it.image_url || '')}">
         <div class="row"><div style="flex:1"><label class="f">Source label</label><input data-f="source" value="${esc(it.source || '')}"></div><div style="flex:1"><label class="f">Author / handle</label><input data-f="author" value="${esc(it.author || '')}"></div></div>
-        <label class="f">Link</label><input data-f="url" value="${esc(it.url || '')}">
-        <div class="row" style="margin-top:18px;justify-content:flex-end"><button class="btn ghost" data-cancel>Cancel</button><button class="btn gold" data-save>Save</button></div>
+        <label class="f">Link (source — opens in a new tab)</label>
+        <div class="row"><input data-f="url" value="${esc(it.url || '')}" style="flex:1">${it.url ? `<a class="btn sm ghost" href="${esc(it.url)}" target="_blank" rel="noopener">Open</a>` : ''}</div>
+        ${it.image_url ? `<div style="margin-top:12px"><img src="${esc(it.image_url)}" alt="" style="max-width:100%;max-height:260px;outline:1px solid rgba(217,216,210,.3)"></div>` : ''}
+        <div class="row" style="margin-top:18px"><button class="btn sm ghost" data-recap2 ${it.url ? '' : 'disabled'}>Recapture screenshot</button><button class="btn sm ghost" data-resum ${it.url ? '' : 'disabled'}>Re-summarize</button><span style="flex:1"></span><button class="btn ghost" data-cancel>Cancel</button><button class="btn gold" data-save>Save</button></div>
       </div>`;
       document.body.appendChild(m);
       const close = () => m.remove();
       m.querySelector('[data-cancel]').onclick = close; m.addEventListener('click', e => { if (e.target === m) close(); });
+      const rc2 = m.querySelector('[data-recap2]'); if (rc2) rc2.onclick = async () => { rc2.disabled = true; rc2.textContent = 'Capturing…'; try { await act('capture', { id: it.id }); close(); toast('Recaptured. Publish to update.'); } catch (e) { rc2.disabled = false; rc2.textContent = 'Recapture screenshot'; } };
+      const rs = m.querySelector('[data-resum]'); if (rs) rs.onclick = async () => { rs.disabled = true; rs.textContent = 'Summarizing…'; try { await act('resummarize', { id: it.id }); close(); toast('Re-summarized. Publish to update.'); } catch (e) { rs.disabled = false; rs.textContent = 'Re-summarize'; } };
       m.querySelector('[data-save]').onclick = async () => { const fields = {}; m.querySelectorAll('[data-f]').forEach(el => { fields[el.dataset.f] = el.value; }); if (!fields.image_url) fields.image_url = null; await act('update', { id: it.id, fields }); close(); toast('Saved. Publish to update the Stage.'); };
       setTimeout(() => m.querySelector('[data-f="headline"]').focus(), 30);
     }

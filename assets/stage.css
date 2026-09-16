@@ -29,6 +29,9 @@
 .stage .sum{font-family:var(--body);font-weight:500;font-size:30px;line-height:1.35;margin-top:36px;color:var(--plat);max-width:60ch}
 .stage .tp{font-family:var(--body);font-weight:600;font-size:26px;line-height:1.4;margin-top:34px;padding-left:22px;border-left:2px solid var(--gold);color:var(--paper);white-space:pre-wrap;max-width:60ch}
 .stage .item-r{position:relative}
+.stage .shotwrap{position:relative;width:620px}
+.stage .pic.shot{object-fit:contain;background:var(--paper)}
+.stage .shoturl{position:absolute;left:0;bottom:0;right:0;background:rgba(11,11,9,.9);border-top:1px solid var(--gold);color:var(--gold2);font-family:var(--mono);font-weight:500;font-size:16px;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stage .pic{width:620px;height:520px;object-fit:cover;display:block;outline:1px solid var(--plat);outline-offset:-1px;background:var(--ink2)}
 .stage .segfield{width:620px;height:520px;background:var(--segbg,var(--ink3));color:var(--segfg,var(--paper));display:flex;align-items:flex-end;padding:40px;outline:1px solid var(--plat);outline-offset:-1px;position:relative;overflow:hidden}
 .stage .segfield .big{font-family:var(--tight);font-weight:800;font-size:112px;line-height:.86;letter-spacing:-.04em;text-transform:uppercase}

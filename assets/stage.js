@@ -20,10 +20,12 @@
     if (card.type === 'card') return renderCard(card, state);
     if (card.type === 'ad') return renderAd(card, state);
     const src = [card.source, card.author].filter(Boolean).join(' · ') || 'DESK';
+    const domain = card.url ? (() => { try { return new URL(card.url).hostname.replace(/^www\./, ''); } catch { return ''; } })() : '';
     const embed = state.show_embed && card.embed_html;
+    const shot = ['x', 'instagram', 'linkedin'].includes(card.type);
     let right = '';
     if (embed) right = `<div class="embed">${card.embed_html}</div>`;
-    else if (card.image_url) right = `<img class="pic" src="${esc(card.image_url)}" alt="">`;
+    else if (card.image_url) right = `<div class="shotwrap"><img class="pic ${shot ? 'shot' : ''}" src="${esc(card.image_url)}" alt="">${domain ? `<div class="shoturl">${esc(domain)}</div>` : ''}</div>`;
     else right = `<div class="segfield seg-${esc(card.segment)}"><div class="mark">${esc(card.source || 'HIGH - LVL DAILY')}</div><div class="big">${esc(L()[card.segment] || card.segment).replace(' ', '<br>')}</div></div>`;
     return `<div class="item">
       <div class="item-l">

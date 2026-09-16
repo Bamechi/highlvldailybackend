@@ -98,3 +98,15 @@ Deletes always ask for a tap to confirm. Free-text commands cost one Claude call
 - VANTA is the convenience gate. The real locks are `STAGE_KEY`, the signed cookie, and the Telegram ID allowlist. Rotate `STAGE_KEY` in Vercel if the Stage URL ever leaks.
 - All writes go through Vercel functions with the service key. The browser's anon key can only read.
 - Only public X and Instagram posts can be read. Private or deleted posts fall back to a plain card with the link's hostname.
+
+# 8. Screenshots + auto headlines (added Sept 16)
+
+Every link you add now becomes a **screenshot image that carries the source link**, plus an **AI-written headline and one-line summary**.
+
+- **How it works:** paste or send a link. The server screenshots the post, writes a punchy headline and a one-sentence summary, and stores the original post URL. The Stage shows the screenshot; the Desk shows an **open source** link and a **Recapture** button.
+- **Video is handled by the link:** the Stage shows the screenshot (poster) and the Desk **open source** link lets you jump to X/IG/etc and play the clip live as needed. No uploads required.
+- **Screenshot provider:** with no key set it uses **Microlink's free tier** (about 25 captures a day, no account). For higher volume add a **ScreenshotOne** access key as `SCREENSHOTONE_ACCESS_KEY`; captured images then store in the Supabase `shots` bucket (created by the schema).
+- **Summaries** use the same `ANTHROPIC_API_KEY` the bot uses. Set `CLAUDE_SUMMARY_MODEL` to a cheaper model if you want to save cost.
+- **Fix a bad one:** on any item press **Recapture** to re-screenshot, or open **Edit → Re-summarize**. You can also paste your own image URL in Edit.
+
+**This activates only once Supabase is connected**, because capture and summary run on the server that also writes to the database. Until then the site runs in single-browser demo mode.
