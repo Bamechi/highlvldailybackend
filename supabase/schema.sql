@@ -36,7 +36,7 @@ create table if not exists stage_state (
   show_embed boolean not null default false,
   ticker_text text not null default '',
   sponsor_name text not null default 'SUPERMIND',
-  sponsor_url text not null default 'supermind.com',
+  sponsor_url text not null default 'asupermind.com',
   episode_label text not null default 'EP 001',
   ad_seconds integer not null default 90,
   ad_started_at timestamptz,
@@ -44,6 +44,12 @@ create table if not exists stage_state (
   updated_at timestamptz not null default now()
 );
 insert into stage_state (id) values (1) on conflict (id) do nothing;
+
+-- Added Sept 16: host names + full sponsor block. Safe to re-run.
+alter table stage_state add column if not exists host1 text not null default '19KEYS';
+alter table stage_state add column if not exists host2 text not null default 'B. AMECHI';
+alter table stage_state add column if not exists sponsor_script text not null default 'Get Clarity in a cup today. Visit asupermind.com and try the best tasting mushroom coffee.';
+alter table stage_state add column if not exists sponsor_qr text not null default '';
 
 -- Telegram confirmations waiting for a yes/no tap.
 create table if not exists pending_actions (

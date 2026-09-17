@@ -2,6 +2,7 @@
 (function (global) {
   const L = () => global.HLD.SEGMENT_LABEL;
   const SITE = '19keys.com/daily'; // where the audience follows up on the show
+  const qrSrc = v => { v = (v || '').trim(); if (!v) return null; if (/^data:|^https?:\/\/\S+\.(png|jpe?g|svg|webp|gif)(\?|#|$)/i.test(v)) return v; return `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=${encodeURIComponent(v)}`; };
   const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const hlSize = t => { const n = (t || '').length; return n <= 40 ? 's1' : n <= 80 ? 's2' : n <= 130 ? 's3' : n <= 200 ? 's4' : 's5'; };
   const ptTime = () => new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', timeZone: 'America/Los_Angeles' }).format(new Date()) + ' PT';
@@ -25,7 +26,7 @@
     const shot = ['x', 'instagram', 'linkedin'].includes(card.type);
     let right = '';
     if (embed) right = `<div class="embed">${card.embed_html}</div>`;
-    else if (card.image_url) right = `<div class="shotwrap"><img class="pic ${shot ? 'shot' : ''}" src="${esc(card.image_url)}" alt="">${domain ? `<div class="shoturl">${esc(domain)}</div>` : ''}</div>`;
+    else if (card.image_url) { const img = `<img class="pic ${shot ? 'shot' : ''}" src="${esc(card.image_url)}" alt="">`; right = `<div class="shotwrap">${card.url ? `<a class="shotlink" href="${esc(card.url)}" target="_blank" rel="noopener" title="Open the original post">${img}</a>` : img}${domain ? `<div class="shoturl">${esc(domain)}${card.url ? ' · click to open' : ''}</div>` : ''}</div>`; }
     else right = `<div class="segfield seg-${esc(card.segment)}"><div class="mark">${esc(card.source || 'HIGH - LVL DAILY')}</div><div class="big">${esc(L()[card.segment] || card.segment).replace(' ', '<br>')}</div></div>`;
     return `<div class="item">
       <div class="item-l">
@@ -48,7 +49,7 @@
 
   function renderAd(card, state) {
     return `<div class="ad"><div class="big">${esc(card.headline || "WE'LL BE RIGHT BACK")}</div>
-      ${state.sponsor_on ? `<div class="presented">Presented by <span class="sponsor">${esc(state.sponsor_name)}</span></div>` : ''}
+      ${state.sponsor_on ? `<div class="presented">Presented by <span class="sponsor">${esc(state.sponsor_name)}</span></div>${state.sponsor_url ? `<div class="ad-spurl">${esc(state.sponsor_url)}</div>` : ''}` : ''}
       ${state.upnext_on && nextTopic(state) ? `<div class="sub">Up next: ${esc(nextTopic(state).headline)}</div>` : ''}
       <div class="site">${SITE}</div>
       <div class="count" data-ad-count></div></div>`;
@@ -69,37 +70,44 @@
     host.innerHTML = `<div class="stage">
       <div class="frame"></div>
       <div class="brand">${wordmark(64, true)}</div>
-      <div class="topright"><span class="chip" data-seg></span><span class="opchip chip" data-op hidden>Opinion</span><span class="ep" data-ep></span><span class="clock" data-clock></span></div>
+      <div class="topright"><span class="chip" data-seg></span><span class="opchip chip" data-op hidden>Opinion</span><span class="ep" data-ep></span><span class="hosts" data-hosts></span><span class="site" data-site></span></div>
       <div class="view"><div data-view></div></div>
       <div class="upnext hide"><div class="lab"><i></i>Up next</div><div class="h1" data-un1></div><div class="h2" data-un2></div></div>
-      <div class="ticker"><div class="tk-brand">High - Lvl Daily</div><div class="tk-track"><div class="tk-text" data-tk></div></div><div class="tk-site">${SITE}</div><div class="tk-sponsor" data-sp hidden>Presented by <b data-spn></b></div><div class="tk-live"><div class="live"><i></i>Live</div></div></div>
+      <div class="ticker"><div class="tk-brand">High - Lvl Daily</div><div class="tk-track"><div class="tk-text" data-tk></div></div><div class="tk-qr" data-qr hidden><img alt="Scan"></div><div class="tk-sponsor" data-sp hidden><span class="tk-splabel">Presented by <b data-spn></b></span><span class="tk-spurl" data-spurl></span></div><div class="tk-live"><div class="live"><i></i>Live</div></div></div>
       <div class="grain"></div>
     </div>`;
     const stage = host.querySelector('.stage');
     const $ = s => host.querySelector(s);
     const fit = () => { const s = Math.min(host.clientWidth / 1920, host.clientHeight / 1080); stage.style.transform = `translate(-50%,-50%) scale(${s})`; };
     new ResizeObserver(fit).observe(host); fit();
-    setInterval(() => { $('[data-clock]').textContent = ptTime(); }, 1000);
-    $('[data-clock]').textContent = ptTime();
 
     let key = null, adTimer = null;
     function paint({ state }) {
       const r = state.rundown || [];
       const card = state.mode === 'item' ? r[state.idx] : null;
       const seg = card ? card.segment : 'the-open';
-      $('[data-ep]').textContent = `${state.episode_label} · ${ptDate()}`;
+      $('[data-ep]').textContent = state.episode_label;
+      $('[data-hosts]').textContent = [state.host1, state.host2].filter(Boolean).join(' · ');
+      $('[data-site]').textContent = SITE;
       const segEl = $('[data-seg]'); segEl.className = `chip seg-${seg}`; segEl.textContent = state.mode === 'agenda' ? 'RUNDOWN' : (L()[seg] || seg);
       $('[data-op]').hidden = !(card && card.frame === 'opinion');
       stage.classList.toggle('opinion', !!(card && card.frame === 'opinion'));
 
-      // ticker
-      const tkText = state.ticker_text || (card && card.type !== 'ad' && card.type !== 'card' ? card.headline : '') || '30 minutes a day to keep you in the know on all things AI, culture, and money, decoded by 19Keys';
+      // ticker: rundown headlines rotating, alternating with the sponsor script
+      const heds = (r || []).filter(c => c.type !== 'ad' && c.type !== 'card').map(c => c.headline).filter(Boolean);
+      const parts = [];
+      if (state.ticker_text) { parts.push(state.ticker_text); if (state.sponsor_script) parts.push(state.sponsor_script); }
+      else if (heds.length) { heds.forEach(h => { parts.push(h); if (state.sponsor_script) parts.push(state.sponsor_script); }); }
+      else { parts.push('30 minutes a day to keep you in the know on all things AI, culture, and money, decoded by 19Keys'); if (state.sponsor_script) parts.push(state.sponsor_script); }
+      const joined = parts.join('    ·    ') + '    ·    ';
       const tk = $('[data-tk]');
-      const line = `${tkText}    ·    `;
-      tk.textContent = line + line; // doubled for seamless loop
-      requestAnimationFrame(() => { const track = tk.parentElement.clientWidth; const w = tk.scrollWidth / 2; tk.classList.toggle('scroll', w > track - 20); tk.style.setProperty('--tkdur', Math.max(18, w / 70) + 's'); if (w <= track - 20) tk.textContent = tkText; });
+      tk.textContent = joined + joined; // doubled for seamless loop
+      requestAnimationFrame(() => { const track = tk.parentElement.clientWidth; const w = tk.scrollWidth / 2; tk.classList.toggle('scroll', w > track - 20); tk.style.setProperty('--tkdur', Math.max(20, w / 70) + 's'); if (w <= track - 20) tk.textContent = joined; });
       $('.ticker').classList.toggle('hide', !state.ticker_on);
       $('[data-sp]').hidden = !state.sponsor_on; $('[data-spn]').textContent = state.sponsor_name;
+      const spurl = $('[data-spurl]'); if (spurl) spurl.textContent = state.sponsor_url || '';
+      const qr = $('[data-qr]'); const qsrc = qrSrc(state.sponsor_qr);
+      if (qsrc && state.sponsor_on) { qr.hidden = false; const im = qr.querySelector('img'); if (im.getAttribute('src') !== qsrc) im.src = qsrc; } else qr.hidden = true;
 
       // up next
       const topics = state.mode === 'item' ? r.slice(state.idx + 1).filter(c => c.type !== 'ad' && c.type !== 'card') : [];

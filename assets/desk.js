@@ -39,13 +39,23 @@
               <button class="btn sm" data-tog="sponsor_on">Sponsor</button>
               <button class="btn sm" data-tog="show_embed">Live embed</button>
             </div>
-            <label class="f">Ticker line (blank = current headline)</label>
+            <label class="f">Ticker override (blank = rundown headlines rotating with the sponsor line)</label>
             <input data-live="ticker_text" placeholder="Breaking: ...">
             <div class="row" style="margin-top:10px">
-              <div style="flex:1"><label class="f" style="margin-top:0">Sponsor</label><input data-live="sponsor_name"></div>
-              <div style="flex:1"><label class="f" style="margin-top:0">Episode</label><input data-live="episode_label"></div>
-              <div style="width:90px"><label class="f" style="margin-top:0">Ad secs</label><input data-live="ad_seconds" type="number" min="10" step="5"></div>
+              <div style="flex:1"><label class="f" style="margin-top:0">Host 1</label><input data-live="host1" placeholder="19KEYS"></div>
+              <div style="flex:1"><label class="f" style="margin-top:0">Host 2</label><input data-live="host2" placeholder="B. AMECHI"></div>
+              <div style="width:104px"><label class="f" style="margin-top:0">Episode</label><input data-live="episode_label"></div>
             </div>
+            <label class="f">Sponsor — presented by / website</label>
+            <div class="row">
+              <div style="flex:1"><input data-live="sponsor_name" placeholder="SUPERMIND"></div>
+              <div style="flex:1"><input data-live="sponsor_url" placeholder="supermind.com"></div>
+            </div>
+            <label class="f">Sponsor script (scrolls in the ticker, alternating with topics)</label>
+            <textarea data-live="sponsor_script" style="min-height:54px"></textarea>
+            <label class="f">Sponsor QR — a link to encode, or a QR image URL (optional)</label>
+            <input data-live="sponsor_qr" placeholder="https://...  (blank = no QR)">
+            <div class="row" style="margin-top:10px"><label class="f" style="margin:0 8px 0 0">Ad break length (sec)</label><input data-live="ad_seconds" type="number" min="10" step="5" style="width:90px"></div>
           </div>
           <div>
             <h2>Add</h2>

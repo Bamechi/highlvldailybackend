@@ -5,7 +5,8 @@
 .stage.opinion .frame{border:2px solid var(--red);box-shadow:inset 0 0 0 1px rgba(232,48,42,.35)}
 .stage .brand{position:absolute;left:56px;top:52px;z-index:3}
 .stage .topright{position:absolute;right:56px;top:56px;display:flex;align-items:center;gap:22px;z-index:3}
-.stage .topright .clock,.stage .topright .ep{font-family:var(--mono);font-weight:500;font-size:18px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.stage .topright .ep,.stage .topright .hosts{font-family:var(--mono);font-weight:500;font-size:18px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.stage .topright .site{font-family:var(--mono);font-weight:700;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2)}
 .stage .topright .chip{height:32px;font-size:14px}
 .stage .opchip{background:var(--red);color:var(--paper);outline:none}
 
@@ -30,6 +31,8 @@
 .stage .tp{font-family:var(--body);font-weight:600;font-size:26px;line-height:1.4;margin-top:34px;padding-left:22px;border-left:2px solid var(--gold);color:var(--paper);white-space:pre-wrap;max-width:60ch}
 .stage .item-r{position:relative}
 .stage .shotwrap{position:relative;width:620px}
+.stage a.shotlink{display:block;cursor:pointer;text-decoration:none}
+.stage a.shotlink:hover .pic{outline:2px solid var(--gold2);outline-offset:-2px}
 .stage .pic.shot{object-fit:contain;background:var(--paper)}
 .stage .shoturl{position:absolute;left:0;bottom:0;right:0;background:rgba(11,11,9,.9);border-top:1px solid var(--gold);color:var(--gold2);font-family:var(--mono);font-weight:500;font-size:16px;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stage .pic{width:620px;height:520px;object-fit:cover;display:block;outline:1px solid var(--plat);outline-offset:-1px;background:var(--ink2)}
@@ -51,6 +54,7 @@
 .stage .ad .presented{margin-top:56px;display:flex;align-items:center;gap:26px;font-family:var(--mich);font-size:22px;letter-spacing:.2em;text-transform:uppercase}
 .stage .ad .sponsor{font-family:var(--tight);font-weight:800;font-size:64px;letter-spacing:-.03em;text-transform:uppercase;padding:14px 28px;outline:1px solid var(--plat);outline-offset:-1px}
 .stage .ad .sub{font-family:var(--body);font-weight:500;font-size:30px;margin-top:44px;opacity:.8;max-width:55ch}
+.stage .ad-spurl{font-family:var(--mono);font-weight:500;font-size:26px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin-top:18px}
 .stage .ad .count{position:absolute;right:80px;top:64px;font-family:var(--mono);font-weight:700;font-size:96px;letter-spacing:.06em;color:var(--red)}
 
 /* agenda */
@@ -88,7 +92,10 @@
 .stage .tk-text{font-family:var(--mono);font-weight:500;font-size:24px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;padding:0 40px}
 .stage .tk-text.scroll{animation:tk var(--tkdur,28s) linear infinite}
 @keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.stage .tk-sponsor{display:flex;align-items:center;gap:16px;padding:0 34px;border-left:1px solid rgba(217,216,210,.25);font-family:var(--mono);font-size:16px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;color:var(--plat)}
+.stage .tk-qr{display:flex;align-items:center;padding:0 20px;border-left:1px solid rgba(217,216,210,.25)}
+.stage .tk-qr img{height:66px;width:66px;background:#fff;padding:5px;display:block}
+.stage .tk-sponsor{display:flex;flex-direction:column;justify-content:center;gap:4px;padding:0 30px;border-left:1px solid rgba(217,216,210,.25);font-family:var(--mono);font-size:16px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;color:var(--plat)}
+.stage .tk-spurl{font-family:var(--mono);font-weight:500;font-size:14px;letter-spacing:.14em;color:var(--gold2)}
 .stage .tk-sponsor b{font-family:var(--tight);font-weight:800;font-size:24px;letter-spacing:-.02em;color:var(--paper)}
 .stage .tk-live{display:flex;align-items:center;padding:0 40px 0 24px}
 

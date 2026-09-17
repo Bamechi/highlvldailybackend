@@ -5,7 +5,7 @@
   const SEGMENTS = ['the-open', 'tech-news', 'the-news', 'culture', 'the-shoutout', 'the-seat', 'the-close'];
   const SEGMENT_LABEL = { 'the-open': 'THE OPEN', 'tech-news': 'TECH NEWS', 'the-news': 'THE NEWS', 'culture': 'CULTURE', 'the-shoutout': 'THE SHOUTOUT', 'the-seat': 'THE SEAT', 'the-close': 'THE CLOSE' };
   const CARD_FIELDS = ['id', 'type', 'url', 'headline', 'summary', 'talking_points', 'image_url', 'author', 'source', 'embed_html', 'segment', 'frame'];
-  const DEFAULT_STATE = { id: 1, rundown: [], idx: 0, mode: 'standby', ticker_on: true, upnext_on: true, sponsor_on: true, show_embed: false, ticker_text: '', sponsor_name: 'SUPERMIND', sponsor_url: 'supermind.com', episode_label: 'EP 001', ad_seconds: 90, ad_started_at: null, published_at: null };
+  const DEFAULT_STATE = { id: 1, rundown: [], idx: 0, mode: 'standby', ticker_on: true, upnext_on: true, sponsor_on: true, show_embed: false, ticker_text: '', sponsor_name: 'SUPERMIND', sponsor_url: 'asupermind.com', episode_label: 'EP 001', ad_seconds: 90, ad_started_at: null, published_at: null, host1: '19KEYS', host2: 'B. AMECHI', sponsor_script: 'Get Clarity in a cup today. Visit asupermind.com and try the best tasting mushroom coffee.', sponsor_qr: '' };
 
   // ---------- Supabase backend ----------
   function supabaseStore(cfg) {
